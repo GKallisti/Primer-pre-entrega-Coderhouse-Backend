@@ -1,0 +1,71 @@
+[
+	{
+		"title": "Vodka Absolut",
+		"description": "Bebida alcoholica destilada",
+		"price": 80,
+		"code": "Fel0020",
+		"stock": 300,
+		"category": "Destilados",
+		"id": 1
+	},
+	{
+		"title": "Jaggermeister",
+		"description": "Licor de Hierbas",
+		"price": 150,
+		"thumbnail": "Sin imagen",
+		"category": "Licores",
+		"code": "Fel001",
+		"stock": 120,
+		"id": 2
+	},
+	{
+		"title": "Fernet Branca",
+		"description": "Aperitivo en base a hierbas",
+		"price": 250,
+		"thumbnail": "Sin imagen",
+		"category": "Aperitivos",
+		"code": "Fel005",
+		"stock": 220,
+		"id": 3
+	},
+	{
+		"title": "Cerveza Corona",
+		"description": "Cerveza Mexican Lager",
+		"price": 250,
+		"thumbnail": "Sin imagen",
+		"category": "Cervezas",
+		"code": "Fel006",
+		"stock": 220,
+		"id": 4
+	},
+	{
+		"title": "Cerveza Heineken",
+		"description": "Cerveza Lager",
+		"price": 250,
+		"thumbnail": "Sin imagen",
+		"category": "Cervezas",
+		"code": "Fel007",
+		"stock": 220,
+		"id": 5
+	},
+	{
+		"title": "Vodka Smirnoff",
+		"description": "Destilado alcoholico",
+		"price": 250,
+		"thumbnail": "Sin imagen",
+		"category": "Destilados",
+		"code": "Fel008",
+		"stock": 220,
+		"id": 6
+	},
+	{
+		"title": "Vodka Stolichnaya",
+		"description": "Vodka Ruso Premium",
+		"price": 250,
+		"thumbnail": "Sin imagen",
+		"category": "Destilados",
+		"code": "Fel010",
+		"stock": 220,
+		"id": 8
+	}
+]
