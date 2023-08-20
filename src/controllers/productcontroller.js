@@ -4,6 +4,7 @@ export default class ProductManager {
   constructor(path) {
     this.path = path;
   }
+  //agregar producto
 
   addProduct = async (product) => {
     try {
@@ -11,23 +12,22 @@ export default class ProductManager {
       const {
         title,
         description,
-        price,
-        thumbnail = [],
         category,
-        status = true,
         code,
         stock,
+        price = true,
+        thumbnail = [],
+        status = true,
       } = product;
       const codeRepeat = products.find((p) => p.code === product.code);
       if (
         !product.title ||
         !product.description ||
-        !product.price ||
-        !product.thumbnail ||
         !product.category ||
-        !product.status ||
         !product.code ||
-        !product.stock
+        !product.stock ||
+        !product.price ||
+        !product.thumbnail
       ) {
         return "Complete all fields";
       }
@@ -107,7 +107,7 @@ export default class ProductManager {
   deleteProduct = async (id) => {
     try {
       const products = await this.getProducts();
-      const index = products.findIndex((p) => p.id === id);
+      const index = products.findIndex((p) => p.id === parseInt(id));
 
       if (index < 0) {
         return `Can't find product with id : ${id}`;
