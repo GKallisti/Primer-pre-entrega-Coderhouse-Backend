@@ -1,52 +1,50 @@
 import express from "express";
-import { Server } from "socket.io";
 import handlebars from "express-handlebars";
-import productsRouter from "./routes/productrouter.js";
-import cartsRouter from "./routes/cartrouter.js";
-import viewsRouter from "./routes/viewsrouter.js";
-import ProductManager from "./controllers/productcontroller.js";
+import productsmdbRouter from "./routes/productrouter.js";
+import cartmdbRouter from "./routes/cartrouter.js";
+import viewsmdbRouter from "./routes/viewsrouter.js";
 import { __dirname } from "./utils.js";
+import MongoStore from 'connect-mongo';
+import session from 'express-session';
+import cookieParser from 'cookie-parser';
+import sessionRouter from './router/sessions.router.js';
+import mongoose from 'mongoose';
+
+
 
 const app = express();
+//const FileStorage = FileStore(session);      
+const PORT = process.env.PORT||8080;
+const server = app.listen(PORT, ()=>console.log(`esuchando en puerto ${PORT}`));
+const connection = mongoose.connect("mongodb+srv://Gkallisti:123@cluster0.obvrjnw.mongodb.net/ecommerce?retryWrites=true&w=majority");
 
-const PORT = 8080;
+
+
+
+const hbs = handlebars.create();
+hbs.allowProtoPropertiesByDefault = true;
+app.engine('handlebars', hbs.engine); 
+app.set('view engine', 'handlebars');
+app.set('views', `${__dirname}/views`);
+
+
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(`${__dirname}/public`));
 
-app.engine("handlebars", handlebars.engine());
-app.set("view engine", "handlebars");
-app.set("views", `${__dirname}/views`);
+app.use(express.urlencoded({extended:true}));
 
-//rutas
-app.use("/api/products", productsRouter);
-app.use("/api/carts", cartsRouter);
-app.use("/", viewsRouter);
+app.use(express.static((`${__dirname}/public`)));
+app.use(cookieParser());
+app.use(session({
+    store: MongoStore.create({
+        mongoUrl: "mongodb+srv://Gkallisti:123@cluster0.obvrjnw.mongodb.net/ecommerce?retryWrites=true&w=majority",
+        ttl:900
+    }),                                            
+    secret: 'coderS3cret',
+    resave: false,                  
+    saveUninitialized: true        }))
 
-const httpServer = app.listen(PORT, () => {
-  console.log(`Servidor escuchando en el puerto ${PORT}`);
-});
-const pmanager = new ProductManager(__dirname + "/files/products.json");
-const socketServer = new Server(httpServer);
-
-socketServer.on("connection", async (socket) => {
-  console.log("Cliente conectado con id: ", socket.id);
-
-  const listProducts = await pmanager.getProducts({});
-  socketServer.emit("sendProducts", listProducts);
-
-  socket.on("addProduct", async (obj) => {
-    await pmanager.addProduct(obj);
-    const listProducts = await pmanager.getProducts({});
-    socketServer.emit("sendProducts", listProducts);
-  });
-
-  socket.on("deleteProduct", async (id) => {
-    await pmanager.deleteProduct(id);
-    const listProducts = await pmanager.getProducts({});
-    socketServer.emit("sendProducts", listProducts);
-  });
-  socket.on("disconnect", () => {
-    console.log("Cliente desconectado");
-  });
-});
+//routes
+app.use('/', viewsmdbRouter);
+app.use('/api/products', productsmdbRouter);
+app.use('/api/carts', cartmdbRouter);
+app.use('/api/sessions', sessionRouter);
